@@ -43,3 +43,8 @@ func parseWarnings(plan string) []Warning {
 
 	return warnings
 }
+
+func extractPlanSummary(plan string) string {
+	s := strings.SplitAfter(plan, "Terraform will perform the following actions:")
+	return s[len(s)-1]
+}
