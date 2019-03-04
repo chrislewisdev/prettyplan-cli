@@ -45,6 +45,23 @@ func parseWarnings(plan string) []Warning {
 }
 
 func extractPlanSummary(plan string) string {
-	s := strings.SplitAfter(plan, "Terraform will perform the following actions:")
-	return s[len(s)-1]
+	splits := strings.SplitAfter(plan, "Terraform will perform the following actions:")
+	return splits[len(splits)-1]
+}
+
+func extractIndividualActions(actionSummary string) []string {
+	//In JS, a negative lookahead was used to accurately capture each distinct action and its diffs
+	//But in Go we can't use lookaheads, so instead we look for the start of each action and take the substrings between them
+	r := regexp.MustCompile(`([~+-]|-\/\+|<=) .*`)
+	matches := r.FindAllStringIndex(actionSummary, -1)
+	actions := make([]string, 0)
+
+	for i := 0; i < len(matches)-1; i++ {
+		actions = append(actions, actionSummary[matches[i][0]:matches[i+1][0]])
+	}
+	if len(matches) >= 1 {
+		actions = append(actions, actionSummary[matches[len(matches)-1][0]:])
+	}
+
+	return actions
 }
