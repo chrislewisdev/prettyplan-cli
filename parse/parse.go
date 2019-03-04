@@ -24,6 +24,13 @@ const (
 	ChangeTypeUnknown  string = "unknown"
 )
 
+type Diff struct {
+	Property          string
+	OldValue          string
+	NewValue          string
+	ForcesNewResource string
+}
+
 func parseId(resourceId string) ResourceId {
 	idSegments := strings.Split(resourceId, ".")
 
@@ -90,4 +97,26 @@ func parseChangeSymbol(changeSymbol string) string {
 	default:
 		return ChangeTypeUnknown
 	}
+}
+
+func takeFirstNonEmptyString(values ...string) string {
+	for _, value := range values {
+		if value != "" {
+			return value
+		}
+	}
+	return values[len(values)-1]
+}
+
+func parseSingleValueDiffs(action string) []Diff {
+	diffs := make([]Diff, 0)
+	r := regexp.MustCompile(`\s*(.*?): *(?:(<computed>)|"(|[\S\s]*?[^\\])")`)
+
+	for _, match := range r.FindAllStringSubmatch(action, -1) {
+		diffs = append(diffs, Diff{
+			Property: strings.TrimSpace(match[1]),
+			NewValue: takeFirstNonEmptyString(match[2], match[3])})
+	}
+
+	return diffs
 }
