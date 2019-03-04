@@ -10,31 +10,23 @@ func TestParseSingleWarning(t *testing.T) {
 	expectString(t, " <warning detail>", warnings[0].Detail)
 }
 
-// test('parse warnings - single warning', function() {
-//     const warnings = parseWarnings('Warning: resource_name: <warning detail>');
+func TestParseMultipleWarnings(t *testing.T) {
+	warnings := parseWarnings("Warning: r1: w1\nWarning: r2: w2\nWarning: r3: w3")
 
-//     expect(warnings).toHaveLength(1);
-//     expect(warnings[0].id.name).toBe('resource_name:');
-//     expect(warnings[0].detail).toBe(' <warning detail>');
-// });
+	expectInt(t, 3, len(warnings))
 
-// test('parse warnings - multiple warning', function() {
-//     const warnings = parseWarnings('Warning: r1: w1\nWarning: r2: w2\nWarning: r3: w3');
+	expectString(t, "r1", warnings[0].Id.Name)
+	expectString(t, " w1", warnings[0].Detail)
 
-//     expect(warnings).toHaveLength(3);
+	expectString(t, "r2", warnings[1].Id.Name)
+	expectString(t, " w2", warnings[1].Detail)
 
-//     expect(warnings[0].id.name).toBe('r1:');
-//     expect(warnings[0].detail).toBe(' w1');
+	expectString(t, "r3", warnings[2].Id.Name)
+	expectString(t, " w3", warnings[2].Detail)
+}
 
-//     expect(warnings[1].id.name).toBe('r2:');
-//     expect(warnings[1].detail).toBe(' w2');
+func TestParseNoWarnings(t *testing.T) {
+	warnings := parseWarnings("Here are some things that are NOT warnings")
 
-//     expect(warnings[2].id.name).toBe('r3:');
-//     expect(warnings[2].detail).toBe(' w3');
-// });
-
-// test('parse warnings - no warnings', function() {
-//     const warnings = parseWarnings('Here are some things that are NOT warnings');
-
-//     expect(warnings).toHaveLength(0);
-// });
+	expectInt(t, 0, len(warnings))
+}

@@ -1,6 +1,9 @@
 package parse
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 type ResourceId struct {
 	Name     string
@@ -30,13 +33,13 @@ func parseId(resourceId string) ResourceId {
 
 func parseWarnings(plan string) []Warning {
 	warnings := make([]Warning, 0)
+	r := regexp.MustCompile("Warning: (.*):(.*)")
 
-	warnings = append(warnings, Warning{
-		Id: ResourceId{
-			Name:     "gateway",
-			Type:     "transit_gateway",
-			Prefixes: nil},
-		Detail: "warning"})
+	for _, match := range r.FindAllStringSubmatch(plan, -1) {
+		warnings = append(warnings, Warning{
+			Id:     parseId(match[1]),
+			Detail: match[2]})
+	}
 
 	return warnings
 }
