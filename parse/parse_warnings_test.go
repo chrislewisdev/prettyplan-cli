@@ -2,15 +2,12 @@ package parse
 
 import "testing"
 
-func testParseSingleWarning(t *testing.T) {
+func TestParseSingleWarning(t *testing.T) {
 	warnings := parseWarnings("Warning: resource_name: <warning detail>")
 
-	if len(warnings) != 1 {
-		t.Error("Expected 1 warning, got ", len(warnings))
-	}
-	if warnings[0].Id.Name != "resource_name" {
-		t.Error("Expected resource name to be 'resource_name, got ", warnings[0].Id.Name)
-	}
+	expectInt(t, 1, len(warnings))
+	expectString(t, "resource_name", warnings[0].Id.Name)
+	expectString(t, " <warning detail>", warnings[0].Detail)
 }
 
 // test('parse warnings - single warning', function() {

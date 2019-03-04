@@ -13,17 +13,19 @@ type Warning struct {
 }
 
 func parseId(resourceId string) ResourceId {
-	// return ResourceId{}
 	idSegments := strings.Split(resourceId, ".")
 
-	resourceName := idSegments[len(idSegments)-1]
-	resourceType := idSegments[len(idSegments)-2]
-	resourcePrefixes := idSegments[0 : len(idSegments)-2]
+	resource := ResourceId{}
 
-	return ResourceId{
-		Name:     resourceName,
-		Type:     resourceType,
-		Prefixes: resourcePrefixes}
+	resource.Name = idSegments[len(idSegments)-1]
+	if len(idSegments) > 1 {
+		resource.Type = idSegments[len(idSegments)-2]
+	}
+	if len(idSegments) > 2 {
+		resource.Prefixes = idSegments[0 : len(idSegments)-2]
+	}
+
+	return resource
 }
 
 func parseWarnings(plan string) []Warning {
