@@ -15,6 +15,15 @@ type Warning struct {
 	Detail string
 }
 
+const (
+	ChangeTypeCreate   string = "create"
+	ChangeTypeDestroy  string = "destroy"
+	ChangeTypeUpdate   string = "update"
+	ChangeTypeRead     string = "read"
+	ChangeTypeRecreate string = "recreate"
+	ChangeTypeUnknown  string = "unknown"
+)
+
 func parseId(resourceId string) ResourceId {
 	idSegments := strings.Split(resourceId, ".")
 
@@ -64,4 +73,21 @@ func extractIndividualActions(actionSummary string) []string {
 	}
 
 	return actions
+}
+
+func parseChangeSymbol(changeSymbol string) string {
+	switch changeSymbol {
+	case "-":
+		return ChangeTypeDestroy
+	case "+":
+		return ChangeTypeCreate
+	case "~":
+		return ChangeTypeUpdate
+	case "-/+":
+		return ChangeTypeRecreate
+	case "<=":
+		return ChangeTypeRead
+	default:
+		return ChangeTypeUnknown
+	}
 }
