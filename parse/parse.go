@@ -28,7 +28,7 @@ type Diff struct {
 	Property          string
 	OldValue          string
 	NewValue          string
-	ForcesNewResource string
+	ForcesNewResource bool
 }
 
 func parseId(resourceId string) ResourceId {
@@ -116,6 +116,22 @@ func parseSingleValueDiffs(action string) []Diff {
 		diffs = append(diffs, Diff{
 			Property: strings.TrimSpace(match[1]),
 			NewValue: takeFirstNonEmptyString(match[2], match[3])})
+	}
+
+	return diffs
+}
+
+func parseNewAndOldValueDiffs(action string) []Diff {
+	diffs := make([]Diff, 0)
+
+	r := regexp.MustCompile(`\s*(.*?): *(?:"(|[\S\s]*?[^\\])")[\S\s]*?=> *(?:(<computed>)|"(|[\S\s]*?[^\\])")( \(forces new resource\))?`)
+
+	for _, match := range r.FindAllStringSubmatch(action, -1) {
+		diffs = append(diffs, Diff{
+			Property:          strings.TrimSpace(match[1]),
+			OldValue:          match[2],
+			NewValue:          takeFirstNonEmptyString(match[3], match[4]),
+			ForcesNewResource: match[5] != ""})
 	}
 
 	return diffs
