@@ -15,6 +15,12 @@ type Warning struct {
 	Detail string
 }
 
+type Action struct {
+	Id    ResourceId
+	Type  string
+	Diffs []Diff
+}
+
 const (
 	ChangeTypeCreate   string = "create"
 	ChangeTypeDestroy  string = "destroy"
@@ -80,6 +86,25 @@ func extractIndividualActions(actionSummary string) []string {
 	}
 
 	return actions
+}
+
+func parseAction(action string) Action {
+	r := regexp.MustCompile(`([~+-]|-\/\+|<=) (.*)`)
+	match := r.FindStringSubmatch(action)
+
+	changeType := parseChangeSymbol(match[1])
+
+	var diffs []Diff
+	if changeType == ChangeTypeCreate || changeType == ChangeTypeRead {
+		diffs = parseSingleValueDiffs(action)
+	} else {
+		diffs = parseNewAndOldValueDiffs(action)
+	}
+
+	return Action{
+		Id:    parseId(match[2]),
+		Type:  changeType,
+		Diffs: diffs}
 }
 
 func parseChangeSymbol(changeSymbol string) string {
