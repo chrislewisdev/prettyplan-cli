@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+type Plan struct {
+	Warnings []Warning
+	Actions  []Action
+}
+
 type ResourceId struct {
 	Name     string
 	Type     string
@@ -35,6 +40,18 @@ type Diff struct {
 	OldValue          string
 	NewValue          string
 	ForcesNewResource bool
+}
+
+func Parse(plan string) Plan {
+	warnings := parseWarnings(plan)
+
+	actionsToParse := extractIndividualActions(extractPlanSummary(plan))
+	actions := make([]Action, 0)
+	for _, action := range actionsToParse {
+		actions = append(actions, parseAction(action))
+	}
+
+	return Plan{Warnings: warnings, Actions: actions}
 }
 
 func parseId(resourceId string) ResourceId {
