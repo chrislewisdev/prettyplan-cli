@@ -1,3 +1,17 @@
+{{define "badge"}}
+<span class="badge">{{.}}</span>
+{{end}}
+
+{{define "id"}}
+<span class="id">
+    {{range .Prefixes}}
+        <span class="id-segment prefix">{{.}}</span>
+    {{end}}
+    <span class="id-segment type">{{.Type}}</span>
+    <span class="id-segment name">{{.Name}}</span>
+</span>
+{{end}}
+
 <!DOCTYPE html>
 <html>
 
@@ -8,6 +22,9 @@
     <style>
 {{.Styles}}
     </style>
+    <script>
+{{.Scripts}}
+    </script>
 </head>
 
 <body>
@@ -20,12 +37,31 @@
     <div class="container">
         <h1>prettyplan {{.Version}}</h1>
         <div id="prettyplan" class="prettyplan">
-            <ul id="errors" class="errors"></ul>
-            <ul id="warnings" class="warnings"></ul>
+            <ul id="warnings" class="warnings">
+            {{range .Plan.Warnings}}
+                <li>
+                    {{template "badge" "warning"}}
+                    {{template "id" .Id}}
+                    <span>{{.Detail}}</span>
+                </li>
+            {{end}}
+            </ul>
             <button class="expand-all" onclick="expandAll()">Expand all</button>
             <button class="collapse-all hidden" onclick="collapseAll()">Collapse all</button>
-            <p>{{.Output}}</p>
-            <ul id="actions" class="actions"></ul>
+            <ul id="actions" class="actions">
+            {{range .Plan.Actions}}
+                <li class="{{.Type}}">
+                    <div class="summary" onclick="accordion(this)">
+                        {{template "badge" .Type}}
+                        {{template "id" .Id}}
+                        <span class="change-count">
+                            {{$count := len .Diffs}}
+                            {{$count}} change{{if gt $count 1}}s{{end}}
+                        </span>
+                    </div>
+                </li>
+            {{end}}
+            </ul>
         </div>
     </div>
 </body>
