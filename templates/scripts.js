@@ -1,45 +1,28 @@
 function accordion(element) {
     const changes = element.parentElement.getElementsByClassName('changes');
     for (var i = 0; i < changes.length; i++) {
-        toggleClass(changes[i], 'collapsed');
+        changes[i].classList.toggle('collapsed');
     }
-}
-
-function toggleClass(element, className) {
-    if (!element.className.match(className)) {
-        element.className += ' ' + className;
-    }
-    else {
-        element.className = element.className.replace(className, '');
-    }
-}
-
-function addClass(element, className) {
-    if (!element.className.match(className)) element.className += ' ' + className;
-}
-
-function removeClass(element, className) {
-    element.className = element.className.replace(className, '');
 }
 
 function expandAll() {
     const sections = document.querySelectorAll('.changes.collapsed');
 
     for (var i = 0; i < sections.length; i++) {
-        toggleClass(sections[i], 'collapsed');
+        sections[i].classList.toggle('collapsed');
     }
 
-    toggleClass(document.querySelector('.expand-all'), 'hidden');
-    toggleClass(document.querySelector('.collapse-all'), 'hidden');
+    document.querySelector('.expand-all').classList.toggle('hidden');
+    document.querySelector('.collapse-all').classList.toggle('hidden');
 }
 
 function collapseAll() {
     const sections = document.querySelectorAll('.changes:not(.collapsed)');
 
     for (var i = 0; i < sections.length; i++) {
-        toggleClass(sections[i], 'collapsed');
+        sections[i].classList.toggle('collapsed');
     }
 
-    toggleClass(document.querySelector('.expand-all'), 'hidden');
-    toggleClass(document.querySelector('.collapse-all'), 'hidden');
+    document.querySelector('.expand-all').classList.toggle('hidden');
+    document.querySelector('.collapse-all').classList.toggle('hidden');
 }

@@ -59,6 +59,22 @@
                             {{$count}} change{{if gt $count 1}}s{{end}}
                         </span>
                     </div>
+                    <div class="changes collapsed">
+                        <table>
+                        {{range .Diffs}}
+                            <tr>
+                                <td class="property">
+                                    {{.Property}}
+                                    {{if .ForcesNewResource}}
+                                        <br /><span class="forces-new-resource">(forces new resource)</span>
+                                    {{end}}
+                                </td>
+                                <td class="old-value">{{.OldValue}}</td>
+                                <td class="new-value">{{.NewValue}}</td>
+                            </tr>
+                        {{end}}
+                        </table>
+                    </div>
                 </li>
             {{end}}
             </ul>
