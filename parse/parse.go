@@ -77,7 +77,8 @@ func parseWarnings(plan string) []Warning {
 	for _, match := range r.FindAllStringSubmatch(plan, -1) {
 		warnings = append(warnings, Warning{
 			Id:     parseId(match[1]),
-			Detail: match[2]})
+			Detail: match[2]},
+		)
 	}
 
 	return warnings
@@ -121,7 +122,8 @@ func parseAction(action string) Action {
 	return Action{
 		Id:    parseId(match[2]),
 		Type:  changeType,
-		Diffs: diffs}
+		Diffs: diffs,
+	}
 }
 
 func parseChangeSymbol(changeSymbol string) string {
@@ -157,7 +159,8 @@ func parseSingleValueDiffs(action string) []Diff {
 	for _, match := range r.FindAllStringSubmatch(action, -1) {
 		diffs = append(diffs, Diff{
 			Property: strings.TrimSpace(match[1]),
-			NewValue: takeFirstNonEmptyString(match[2], match[3])})
+			NewValue: takeFirstNonEmptyString(match[2], match[3]),
+		})
 	}
 
 	return diffs
@@ -173,7 +176,8 @@ func parseNewAndOldValueDiffs(action string) []Diff {
 			Property:          strings.TrimSpace(match[1]),
 			OldValue:          match[2],
 			NewValue:          takeFirstNonEmptyString(match[3], match[4]),
-			ForcesNewResource: match[5] != ""})
+			ForcesNewResource: match[5] != "",
+		})
 	}
 
 	return diffs

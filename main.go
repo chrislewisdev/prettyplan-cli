@@ -1,9 +1,15 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"os"
+	"regexp"
+	"strconv"
+	"strings"
 
 	"github.com/chrislewisdev/prettyplan-cli/parse"
 )
@@ -80,7 +86,7 @@ func main() {
 	
 	-/+ null_resource.promote_images (new resource required)
 			id:                       "1236159896537553123" => <computed> (forces new resource)
-			triggers.%:               "1" => "1"
+			triggers.%:               "1" => "1.2"
 			triggers.deploy_job_hash: "6c37ac7175bdf35e24a2f2755addd238" => "1a0bd86fc5831ee66858f2e159efa547" (forces new resource)
 	
 	
@@ -100,7 +106,11 @@ func main() {
 	scripts, err := ioutil.ReadFile("templates/scripts.js")
 	panicIfError(err)
 
-	reportTemplate, err := template.ParseFiles("templates/prettyplan.html")
+	templateFunctions := template.FuncMap{
+		"prettify": prettify,
+	}
+
+	reportTemplate, err := template.New("prettyplan.html").Funcs(templateFunctions).ParseFiles("templates/prettyplan.html")
 	panicIfError(err)
 
 	outputFile, err := os.Create("prettyplan.html")
@@ -110,4 +120,36 @@ func main() {
 	panicIfError(err)
 
 	outputFile.Close()
+}
+
+func prettify(value string) template.HTML {
+	value = unescapeCharacters(value)
+
+	if value == "<computed>" {
+		return template.HTML("<em>&lt;computed&gt;</em>")
+	} else if strings.HasPrefix(value, "${") && strings.HasSuffix(value, "}") {
+		return template.HTML("<em>" + value + "</em")
+	} else if _, notNumber := strconv.ParseFloat(value, 32); json.Valid([]byte(value)) && notNumber != nil {
+		//\${[^}]*(").*(").*}
+		var prettyJson bytes.Buffer
+		json.Indent(&prettyJson, []byte(value), "", "  ")
+		return template.HTML(fmt.Sprintf("<pre>%v</pre>", prettyJson.String()))
+	} else {
+		return template.HTML(value)
+	}
+}
+
+func unescapeCharacters(value string) string {
+	value = strings.Replace(value, `\n`, "\n", -1)
+	value = strings.Replace(value, `\"`, "\"", -1)
+
+	//This feels dumb - but, the above unescaping might unescape some \" sequences that need to be left alone
+	//e.g. terraform properties inside json strings like ${terraform_property["index"]}
+	//So this regex will let us re-escape any quotes inside a terraform property
+	r := regexp.MustCompile(`(\${[^}]*?[^\\}])"([^}]*?})`)
+	for r.MatchString(value) {
+		value = r.ReplaceAllString(value, `$1\"$2`)
+	}
+
+	return value
 }

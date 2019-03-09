@@ -69,8 +69,8 @@
                                         <br /><span class="forces-new-resource">(forces new resource)</span>
                                     {{end}}
                                 </td>
-                                <td class="old-value">{{.OldValue}}</td>
-                                <td class="new-value">{{.NewValue}}</td>
+                                <td class="old-value">{{.OldValue | prettify}}</td>
+                                <td class="new-value">{{.NewValue | prettify}}</td>
                             </tr>
                         {{end}}
                         </table>
