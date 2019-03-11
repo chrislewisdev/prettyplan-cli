@@ -203,6 +203,10 @@ li.read .badge {
 pre {
     white-space: pre-wrap;
 }
+pre#raw-output {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 8px;
+}
 
 .changes table td.property {
     width: 20%;

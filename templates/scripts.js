@@ -26,3 +26,7 @@ function collapseAll() {
     document.querySelector('.expand-all').classList.toggle('hidden');
     document.querySelector('.collapse-all').classList.toggle('hidden');
 }
+
+function toggleRawPlan() {
+    document.getElementById('raw-output').classList.toggle('collapsed');
+}
