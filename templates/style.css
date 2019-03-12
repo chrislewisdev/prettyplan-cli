@@ -49,9 +49,11 @@ body {
 }
 
 .container {
-    margin: 10px 10px 0 10px;
     animation-name: fade-in;
     animation-duration: 1s;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 h1, h2 {
@@ -92,6 +94,15 @@ button.text-button {
     color: inherit;
     text-align: inherit;
     padding: 0;
+}
+button.text-button.major {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    border-radius: 2px;
+}
+button.text-button.major:hover {
+    background-color:  rgba(0, 0, 0, 0.05);
 }
 
 .prettyplan ul {
@@ -200,6 +211,11 @@ li.read .badge {
 
 pre {
     white-space: pre-wrap;
+}
+pre#raw-output {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 8px;
+    margin: 0;
 }
 
 .changes table td.property {

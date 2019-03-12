@@ -1,3 +1,17 @@
+{{define "badge"}}
+<span class="badge">{{.}}</span>
+{{end}}
+
+{{define "id"}}
+<span class="id">
+    {{range .Prefixes}}
+        <span class="id-segment prefix">{{.}}</span>
+    {{end}}
+    <span class="id-segment type">{{.Type}}</span>
+    <span class="id-segment name">{{.Name}}</span>
+</span>
+{{end}}
+
 <!DOCTYPE html>
 <html>
 
@@ -8,24 +22,65 @@
     <style>
 {{.Styles}}
     </style>
+    <script>
+{{.Scripts}}
+    </script>
 </head>
 
 <body>
     <div class="stripe"></div>
-    <div id="release-notification" class="hidden"></div>
     <div id="branding">
-        Source on <a href="https://github.com/chrislewisdev/prettyplan">GitHub</a><br />
+        Source on <a href="https://github.com/chrislewisdev/prettyplan-cli">GitHub</a><br />
         By <a href="https://twitter.com/chrislewisdev">Chris Lewis</a><br />
     </div>
     <div class="container">
         <h1>prettyplan {{.Version}}</h1>
+        <button class="major text-button toggle-raw-output" onclick="toggleRawPlan()">show/hide raw Terraform output</button>
+        <pre id="raw-output" class="collapsed">
+            {{.RawPlan}}
+        </pre>
         <div id="prettyplan" class="prettyplan">
-            <ul id="errors" class="errors"></ul>
-            <ul id="warnings" class="warnings"></ul>
+            <ul id="warnings" class="warnings">
+            {{range .Plan.Warnings}}
+                <li>
+                    {{template "badge" "warning"}}
+                    {{template "id" .Id}}
+                    <span>{{.Detail}}</span>
+                </li>
+            {{end}}
+            </ul>
             <button class="expand-all" onclick="expandAll()">Expand all</button>
             <button class="collapse-all hidden" onclick="collapseAll()">Collapse all</button>
-            <p>{{.Output}}</p>
-            <ul id="actions" class="actions"></ul>
+            <ul id="actions" class="actions">
+            {{range .Plan.Actions}}
+                <li class="{{.Type}}">
+                    <div class="summary" onclick="accordion(this)">
+                        {{template "badge" .Type}}
+                        {{template "id" .Id}}
+                        <span class="change-count">
+                            {{$count := len .Diffs}}
+                            {{$count}} change{{if gt $count 1}}s{{end}}
+                        </span>
+                    </div>
+                    <div class="changes collapsed">
+                        <table>
+                        {{range .Diffs}}
+                            <tr>
+                                <td class="property">
+                                    {{.Property}}
+                                    {{if .ForcesNewResource}}
+                                        <br /><span class="forces-new-resource">(forces new resource)</span>
+                                    {{end}}
+                                </td>
+                                <td class="old-value">{{.OldValue | prettify}}</td>
+                                <td class="new-value">{{.NewValue | prettify}}</td>
+                            </tr>
+                        {{end}}
+                        </table>
+                    </div>
+                </li>
+            {{end}}
+            </ul>
         </div>
     </div>
 </body>
