@@ -95,6 +95,15 @@ button.text-button {
     text-align: inherit;
     padding: 0;
 }
+button.text-button.major {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    border-radius: 2px;
+}
+button.text-button.major:hover {
+    background-color:  rgba(0, 0, 0, 0.05);
+}
 
 .prettyplan ul {
     padding-left: 0;
@@ -204,8 +213,9 @@ pre {
     white-space: pre-wrap;
 }
 pre#raw-output {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.05);
     padding: 8px;
+    margin: 0;
 }
 
 .changes table td.property {

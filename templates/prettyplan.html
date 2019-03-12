@@ -30,12 +30,12 @@
 <body>
     <div class="stripe"></div>
     <div id="branding">
-        Source on <a href="https://github.com/chrislewisdev/prettyplan">GitHub</a><br />
+        Source on <a href="https://github.com/chrislewisdev/prettyplan-cli">GitHub</a><br />
         By <a href="https://twitter.com/chrislewisdev">Chris Lewis</a><br />
     </div>
     <div class="container">
         <h1>prettyplan {{.Version}}</h1>
-        <button class="text-button toggle-raw-output" onclick="toggleRawPlan()">show/hide raw Terraform output</button>
+        <button class="major text-button toggle-raw-output" onclick="toggleRawPlan()">show/hide raw Terraform output</button>
         <pre id="raw-output" class="collapsed">
             {{.RawPlan}}
         </pre>
