@@ -1,3 +1,4 @@
+//go:generate packr2
 package main
 
 import (

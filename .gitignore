@@ -1,2 +1,3 @@
 # Output from test runs
 /*.html
+*-packr.go
