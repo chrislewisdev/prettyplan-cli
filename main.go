@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"os"
 	"os/exec"
+	"time"
 
 	"github.com/chrislewisdev/prettyplan-cli/parse"
 	"github.com/chrislewisdev/prettyplan-cli/render"
@@ -13,11 +14,12 @@ import (
 )
 
 type report struct {
-	Version string
-	Plan    parse.Plan
-	RawPlan string
-	Styles  template.CSS
-	Scripts template.JS
+	Version    string
+	Plan       parse.Plan
+	RawPlan    string
+	Styles     template.CSS
+	Scripts    template.JS
+	ReportTime string
 }
 
 func panicIfError(err error) {
@@ -61,11 +63,12 @@ func main() {
 	panicIfError(err)
 
 	err = reportTemplate.Execute(outputFile, report{
-		Version: "v1.2",
-		Plan:    plan,
-		RawPlan: string(rawPlan),
-		Styles:  template.CSS(styles),
-		Scripts: template.JS(scripts),
+		Version:    "v1.2",
+		Plan:       plan,
+		RawPlan:    string(rawPlan),
+		Styles:     template.CSS(styles),
+		Scripts:    template.JS(scripts),
+		ReportTime: time.Now().Format(time.ANSIC),
 	})
 	panicIfError(err)
 
