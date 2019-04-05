@@ -19,12 +19,8 @@
     <meta charset="utf-8" />
     <title>prettyplan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-{{.Styles}}
-    </style>
-    <script>
-{{.Scripts}}
-    </script>
+    <style>{{.Styles}}</style>
+    <script>{{.Scripts}}</script>
 </head>
 
 <body>
@@ -36,9 +32,7 @@
     <div class="container">
         <h1>prettyplan {{.Version}}</h1>
         <button class="major text-button toggle-raw-output" onclick="toggleRawPlan()">show/hide raw Terraform output</button>
-        <pre id="raw-output" class="collapsed">
-            {{.RawPlan}}
-        </pre>
+        <pre id="raw-output" class="collapsed">{{.RawPlan}}</pre>
         <div id="prettyplan" class="prettyplan">
             <ul id="warnings" class="warnings">
             {{range .Plan.Warnings}}
@@ -49,8 +43,13 @@
                 </li>
             {{end}}
             </ul>
-            <button class="expand-all" onclick="expandAll()">Expand all</button>
-            <button class="collapse-all hidden" onclick="collapseAll()">Collapse all</button>
+            {{$actionCount := len .Plan.Actions}}
+            {{if eq $actionCount 0}}
+                <h2>No changes. Infrastructure is up-to-date.</h2>
+            {{else}}
+                <button class="expand-all" onclick="expandAll()">Expand all</button>
+                <button class="collapse-all hidden" onclick="collapseAll()">Collapse all</button>
+            {{end}}
             <ul id="actions" class="actions">
             {{range .Plan.Actions}}
                 <li class="{{.Type}}">
@@ -58,8 +57,8 @@
                         {{template "badge" .Type}}
                         {{template "id" .Id}}
                         <span class="change-count">
-                            {{$count := len .Diffs}}
-                            {{$count}} change{{if gt $count 1}}s{{end}}
+                            {{$changeCount := len .Diffs}}
+                            {{$changeCount}} change{{if gt $changeCount 1}}s{{end}}
                         </span>
                     </div>
                     <div class="changes collapsed">
