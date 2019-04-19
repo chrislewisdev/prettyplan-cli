@@ -2,6 +2,10 @@
 
 Generate easily-readable HTML versions of your `terraform plan` output right from the comfort of your command line.
 
+## Installation
+
+Coming soon - I need to set up some GitHub releases.
+
 ## Usage
 
 Simply run `prettyplan` instead of `terraform plan` inside a Terraform project. Prettyplan will capture the output and format it into `prettyplan.html` in the same folder.

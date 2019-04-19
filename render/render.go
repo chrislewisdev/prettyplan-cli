@@ -28,6 +28,7 @@ func Prettify(value string) template.HTML {
 
 func unescapeCharacters(value string) string {
 	value = strings.Replace(value, `\n`, "\n", -1)
+	value = strings.Replace(value, `\r`, "\r", -1)
 	value = strings.Replace(value, `\"`, "\"", -1)
 
 	//This feels dumb - but, the above unescaping might unescape some \" sequences that need to be left alone
