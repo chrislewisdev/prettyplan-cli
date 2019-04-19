@@ -17,7 +17,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>prettyplan</title>
+    <title>prettyplan cli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>{{.Styles}}</style>
     <script>{{.Scripts}}</script>
@@ -31,7 +31,7 @@
         By <a href="https://twitter.com/chrislewisdev">Chris Lewis</a><br />
     </div>
     <div class="container">
-        <h1>prettyplan {{.Version}}</h1>
+        <h1>prettyplan cli {{.Version}}</h1>
         <button class="major text-button toggle-raw-output" onclick="toggleRawPlan()">show/hide raw Terraform output</button>
         <pre id="raw-output" class="collapsed">{{.RawPlan}}</pre>
         <div id="prettyplan" class="prettyplan">
