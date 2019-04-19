@@ -2,13 +2,13 @@ language: go
 go: 1.x
 
 script:
-  - cd prettyplan-cli
-  - go test -v ./..
+  - travis_cmd "go test -v ./.."
   - go get -u github.com/gobuffalo/packr/v2/packr2
   - go generate
-  - GOOS=windows GOARCH=amd64 go build -o dist/prettyplan_windows.exe
   - GOOS=linux GOARCH=amd64 go build -o dist/prettyplan_linux
   - GOOS=darwin GOARCH=amd64 go build -o dist/prettyplan_macos
+  - GOOS=windows go get
+  - GOOS=windows GOARCH=amd64 go build -o dist/prettyplan_windows.exe
 
 deploy:
   provider: releases
