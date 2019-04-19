@@ -1,10 +1,13 @@
 language: go
 go: 1.x
 
-script:
-  - travis_cmd "go test -v ./.."
+install:
+  - travis_install_go_dependencies 1.x -v
   - go get -u github.com/gobuffalo/packr/v2/packr2
   - go generate
+
+script:
+  - travis_script_go -v
   - GOOS=linux GOARCH=amd64 go build -o dist/prettyplan_linux
   - GOOS=darwin GOARCH=amd64 go build -o dist/prettyplan_macos
   - GOOS=windows go get
