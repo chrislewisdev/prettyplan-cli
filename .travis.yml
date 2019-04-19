@@ -1,2 +1,21 @@
 language: go
 go: 1.x
+
+before_deploy:
+  - GOOS=windows GOARCH=amd64 go build -o dist/prettyplan_windows.exe
+  - GOOS=linux GOARCH=amd64 go build -o dist/prettyplan_linux
+  - GOOS=darwin GOARCH=amd64 go build -o dist/prettyplan_macos
+
+deploy:
+  provider: releases
+  api_key:
+    secure: sOgyHMy8+wxsw4jFGy1ovLklgwfm2PeHGo/p0v+6cidvW3N/HEw8Y2jJh+lKV8tJoCZAs5wTdMV4VwJt/K/bStQmOgf05u7tsO/Q8REpkWx04MUgo+VsWPTSPVGl7O0loDmb+Cp/nPEaGYc/8rS1cW/xeImgqWFjfPpNUWYd0yRPRpYE+BtdcPGXQl2/rhzOedtqyrw8BFGDOqFsXQFFZXExBup//uxtFXsF5fgNZ0yjHMM93NqlPXsBQj73gOmp5FlUI0cpBaAK0G54n71HTx1xElKtVWxpkoT+DsNuTtuS0OMGQHYNI4h2zAysZ1uaLqQetBHswiAdkURtjyvl7zGPkaEGAIjLqdBPwK1vpHApLiKRc7z5jR12DRe9f4U5oKiNb/wkr8prb4XalbJ6+8qTg16Hc5voYBqHQ4VeLkhu8t6bRrlRNwq3piiTetDSIRZyoLM35W+NFpL+hWfHtCQa/z7EtWsjs37R13CNqOnKIXY5y5FVla3sGThcnjVa+6KHTGNkVOy99xsG09vMP7VvSUmrPywx6uLwdVvn2VeJ18J/jWwK/FhLJmDew2HY0awNyztyfJPymYsq1Sy+Jb/IQSLvK66IQT1zfHzjAteeDgOpAVaXjnhBYLjL/JLvoj1c6hUepb6bsoiYvT0BGzBiOGya6pLZLyaXsCqxmOA=
+  draft: true
+  file: 
+    - dist/prettyplan_windows.exe
+    - dist/prettyplan_macos
+    - dist/prettyplan_linux
+  skip_cleanup: true
+  on:
+    repo: chrislewisdev/prettyplan-cli
+    tags: true
