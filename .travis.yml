@@ -2,7 +2,7 @@ language: go
 go: 1.x
 
 script:
-  - travis_script_go -v
+  - go test ${gobuild_args} ./...
   - go get -u github.com/gobuffalo/packr/v2/packr2
   - go generate
   - GOOS=linux GOARCH=amd64 go build -o dist/prettyplan_linux
