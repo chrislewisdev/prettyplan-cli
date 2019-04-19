@@ -1,7 +1,10 @@
 language: go
 go: 1.x
 
-before_deploy:
+script:
+  - go test -v ./..
+  - go get -u github.com/gobuffalo/packr/v2/packr2
+  - go generate
   - GOOS=windows GOARCH=amd64 go build -o dist/prettyplan_windows.exe
   - GOOS=linux GOARCH=amd64 go build -o dist/prettyplan_linux
   - GOOS=darwin GOARCH=amd64 go build -o dist/prettyplan_macos
