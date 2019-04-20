@@ -2,18 +2,18 @@ language: go
 go: 1.x
 
 script:
-  - go test ${gobuild_args} ./...
-  - go get -u github.com/gobuffalo/packr/v2/packr2
-  - go generate
-  - GOOS=linux GOARCH=amd64 go build -o dist/prettyplan_linux
-  - GOOS=darwin GOARCH=amd64 go build -o dist/prettyplan_macos
-  - GOOS=windows go get
-  - GOOS=windows GOARCH=amd64 go build -o dist/prettyplan_windows.exe
+- go test ${gobuild_args} ./...
+- go get -u github.com/gobuffalo/packr/v2/packr2
+- go generate
+- GOOS=linux GOARCH=amd64 go build -o dist/prettyplan_linux
+- GOOS=darwin GOARCH=amd64 go build -o dist/prettyplan_macos
+- GOOS=windows go get
+- GOOS=windows GOARCH=amd64 go build -o dist/prettyplan_windows.exe
 
 deploy:
   provider: releases
   api_key:
-    secure: sOgyHMy8+wxsw4jFGy1ovLklgwfm2PeHGo/p0v+6cidvW3N/HEw8Y2jJh+lKV8tJoCZAs5wTdMV4VwJt/K/bStQmOgf05u7tsO/Q8REpkWx04MUgo+VsWPTSPVGl7O0loDmb+Cp/nPEaGYc/8rS1cW/xeImgqWFjfPpNUWYd0yRPRpYE+BtdcPGXQl2/rhzOedtqyrw8BFGDOqFsXQFFZXExBup//uxtFXsF5fgNZ0yjHMM93NqlPXsBQj73gOmp5FlUI0cpBaAK0G54n71HTx1xElKtVWxpkoT+DsNuTtuS0OMGQHYNI4h2zAysZ1uaLqQetBHswiAdkURtjyvl7zGPkaEGAIjLqdBPwK1vpHApLiKRc7z5jR12DRe9f4U5oKiNb/wkr8prb4XalbJ6+8qTg16Hc5voYBqHQ4VeLkhu8t6bRrlRNwq3piiTetDSIRZyoLM35W+NFpL+hWfHtCQa/z7EtWsjs37R13CNqOnKIXY5y5FVla3sGThcnjVa+6KHTGNkVOy99xsG09vMP7VvSUmrPywx6uLwdVvn2VeJ18J/jWwK/FhLJmDew2HY0awNyztyfJPymYsq1Sy+Jb/IQSLvK66IQT1zfHzjAteeDgOpAVaXjnhBYLjL/JLvoj1c6hUepb6bsoiYvT0BGzBiOGya6pLZLyaXsCqxmOA=
+    secure: d5HNVyPOhCDPRbMgW2doEevLpo3O7NljceCIOFFM5NBOXe8TgHPMjisu0pQvv9lY/FhHUSr5a40Ah1U2zaoRBZsGqubYgJtzRanR+I2nP0dT6Zxeog4UPmTuX/GBJrd7Z4ZClvLhhYoJ5QKjm3ueX6A2KBj7diqATNy/pxME3jL7uLuA/kMtiIafgTuKswBgjjDyozmGif36SYXgJPFutRFTOesndGjghQe2yeax2s0+fL9r4hLOOS8+mxhRH097fiAOiUisddHeJvoEY6XLmf6s7zT9vK4IgZFry2KUq88puNuGdGHMgspfdS2LHSFTxfgykEDERIqgkkoZlxI7OJnsmDHiF3+tFJSlgzd8ipBPFF2sbNjiFumZC91iQ9jVdeSlet3Gl3WhDXb+mzikjWHV1NgRXoZJlqc/Q72Qgr3H3ArJ5gkvKS0HtEFEevP16xmGodsX6/Nhs++xn+5X2DmlH5D2/M3Jc9CgyJ8br+FCvXIcuD4c8NymRfVjnxPd+3u95c1c3/aHp/6rVc5YXXQ10wyfKZANqOYh1DhMavB6VFslGuyOG8KdnjdtY+ITin35JfLh64MppCKMF1Gm7AvJ1Xcf6Q2DPoke6FemBXcQ8GnEbXrQ0V9ZqbUBPDQ+6GEsYa2Y0NLk/qGczbqUXxVpwUWFM6kq8AqBv6CPt0c=
   draft: true
   file: 
     - dist/prettyplan_windows.exe
@@ -23,3 +23,4 @@ deploy:
   on:
     repo: chrislewisdev/prettyplan-cli
     tags: true
+    
