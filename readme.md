@@ -2,6 +2,8 @@
 
 Generate easily-readable HTML versions of your `terraform plan` output right from the comfort of your command line.
 
+![prettyplan report](https://raw.githubusercontent.com/chrislewisdev/prettyplan-cli/master/screenshot.png)
+
 ## Installation
 
 Head on over to the [Releases page](https://github.com/chrislewisdev/prettyplan-cli/releases) and download the latest release executable for your platform. Place the executable somewhere your command line will be able to find it (i.e. your PATH), and you should be good to go!
@@ -10,7 +12,11 @@ Head on over to the [Releases page](https://github.com/chrislewisdev/prettyplan-
 
 ## Usage
 
-Simply run `prettyplan` instead of `terraform plan` inside a Terraform project. Prettyplan will capture the output and write your prettified report into a `prettyplan.html` file in the same folder.
+In a terraform project (where you would normally run `terraform plan`, simply run:
+```
+prettyplan
+```
+Prettyplan will run `terraform plan`, capture its output and write your prettified report into a `prettyplan.html` file in the same folder.
 
 ## Building from source
 
