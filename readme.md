@@ -4,11 +4,13 @@ Generate easily-readable HTML versions of your `terraform plan` output right fro
 
 ## Installation
 
-Coming soon - I need to set up some GitHub releases.
+Head on over to the [Releases page](https://github.com/chrislewisdev/prettyplan-cli/releases) and download the latest release executable for your platform. Place the executable somewhere your command line will be able to find it (i.e. your PATH), and you should be good to go!
+
+(Note: the Linux/MacOS versions have not yet been tested. Feedback on these versions will be much appreciated!)
 
 ## Usage
 
-Simply run `prettyplan` instead of `terraform plan` inside a Terraform project. Prettyplan will capture the output and format it into `prettyplan.html` in the same folder.
+Simply run `prettyplan` instead of `terraform plan` inside a Terraform project. Prettyplan will capture the output and write your prettified report into a `prettyplan.html` file in the same folder.
 
 ## Building from source
 
@@ -17,4 +19,5 @@ If you would like to build prettyplan locally with either `go build` or `go inst
 ```
 go get -u github.com/gobuffalo/packr/v2/packr2
 go generate
+go build
 ```
