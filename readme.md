@@ -12,7 +12,7 @@ Head on over to the [Releases page](https://github.com/chrislewisdev/prettyplan-
 
 ## Usage
 
-In a terraform project (where you would normally run `terraform plan`, simply run:
+In a terraform project (where you would normally run `terraform plan`), simply run:
 ```
 prettyplan
 ```
