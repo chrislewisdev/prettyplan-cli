@@ -18,6 +18,8 @@ prettyplan
 ```
 Prettyplan will run `terraform plan`, capture its output and write your prettified report into a `prettyplan.html` file in the same folder.
 
+To open the generated report as soon as it is ready, use the `-open` flag.
+
 ## Building from source
 
 If you would like to build prettyplan locally with either `go build` or `go install`, you'll want to first generate the embedded template files using [packr](https://github.com/gobuffalo/packr/tree/master/v2):

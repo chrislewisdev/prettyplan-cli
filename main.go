@@ -2,6 +2,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html/template"
 	"os"
@@ -11,6 +12,7 @@ import (
 	"github.com/chrislewisdev/prettyplan-cli/parse"
 	"github.com/chrislewisdev/prettyplan-cli/render"
 	"github.com/gobuffalo/packr/v2"
+	"github.com/pkg/browser"
 )
 
 type report struct {
@@ -29,6 +31,9 @@ func panicIfError(err error) {
 }
 
 func main() {
+	openFileFlag := flag.Bool("open", false, "To open the HTML report once generated")
+	flag.Parse()
+
 	templates := packr.New("Templates", "./templates")
 
 	styles, err := templates.FindString("style.css")
@@ -73,4 +78,8 @@ func main() {
 	panicIfError(err)
 
 	outputFile.Close()
+
+	if *openFileFlag {
+		browser.OpenFile("prettyplan.html")
+	}
 }
