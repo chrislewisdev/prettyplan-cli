@@ -68,7 +68,7 @@ func main() {
 	panicIfError(err)
 
 	err = reportTemplate.Execute(outputFile, report{
-		Version:    "v1.0",
+		Version:    "v1.1",
 		Plan:       plan,
 		RawPlan:    string(rawPlan),
 		Styles:     template.CSS(styles),
