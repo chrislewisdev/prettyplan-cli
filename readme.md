@@ -1,6 +1,6 @@
 # Prettyplan (CLI Version)
 
-Generate easily-readable HTML versions of your `terraform plan` output right from the comfort of your command line.
+Generate easily-readable HTML versions of your `terraform plan` output right from the comfort of your command line. (a web version is available at https://prettyplan.chrislewisdev.com/)
 
 ![prettyplan report](https://raw.githubusercontent.com/chrislewisdev/prettyplan-cli/master/screenshot.png)
 
