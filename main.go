@@ -15,13 +15,24 @@ import (
 	"github.com/pkg/browser"
 )
 
-type report struct {
-	Version    string
-	Plan       parse.Plan
-	RawPlan    string
-	Styles     template.CSS
-	Scripts    template.JS
-	ReportTime string
+func main() {
+	openFileFlag := flag.Bool("open", false, "To open the HTML report once generated")
+	flag.Parse()
+
+	assets := getAssets()
+
+	var plan *planInfo
+	var err error
+	if plan, err = getPlan(); err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	writeReport("prettyplan.html", assets, plan)
+
+	if *openFileFlag {
+		browser.OpenFile("prettyplan.html")
+	}
 }
 
 func panicIfError(err error) {
@@ -30,10 +41,13 @@ func panicIfError(err error) {
 	}
 }
 
-func main() {
-	openFileFlag := flag.Bool("open", false, "To open the HTML report once generated")
-	flag.Parse()
+type templateAssets struct {
+	Styles   template.CSS
+	Scripts  template.JS
+	Template *template.Template
+}
 
+func getAssets() *templateAssets {
 	templates := packr.New("Templates", "./templates")
 
 	styles, err := templates.FindString("style.css")
@@ -52,34 +66,54 @@ func main() {
 	reportTemplate, err := template.New("prettyplan.html").Funcs(templateFunctions).Parse(html)
 	panicIfError(err)
 
+	return &templateAssets{
+		Styles:   template.CSS(styles),
+		Scripts:  template.JS(scripts),
+		Template: reportTemplate,
+	}
+}
+
+type planInfo struct {
+	Raw    string
+	Parsed parse.Plan
+}
+
+func getPlan() (*planInfo, error) {
 	rawPlan, err := exec.Command("terraform", "plan", "-no-color").Output()
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
-			fmt.Printf("terraform plan failed! Output:\n %v", string(exitError.Stderr))
-		} else {
-			fmt.Printf("terraform plan failed! Output:\n %v", err.Error())
+			return nil, fmt.Errorf("terraform plan failed! Output:\n %v", string(exitError.Stderr))
 		}
-		return
+		return nil, fmt.Errorf("terraform plan failed! Output:\n %v", err.Error())
 	}
 
 	plan := parse.Parse(string(rawPlan))
 
-	outputFile, err := os.Create("prettyplan.html")
+	return &planInfo{Raw: string(rawPlan), Parsed: plan}, nil
+}
+
+type reportInfo struct {
+	Version    string
+	Plan       parse.Plan
+	RawPlan    string
+	Styles     template.CSS
+	Scripts    template.JS
+	ReportTime string
+}
+
+func writeReport(fileName string, assets *templateAssets, plan *planInfo) {
+	outputFile, err := os.Create(fileName)
 	panicIfError(err)
 
-	err = reportTemplate.Execute(outputFile, report{
+	err = assets.Template.Execute(outputFile, reportInfo{
 		Version:    "v1.1",
-		Plan:       plan,
-		RawPlan:    string(rawPlan),
-		Styles:     template.CSS(styles),
-		Scripts:    template.JS(scripts),
+		Plan:       plan.Parsed,
+		RawPlan:    plan.Raw,
+		Styles:     assets.Styles,
+		Scripts:    assets.Scripts,
 		ReportTime: time.Now().Format(time.ANSIC),
 	})
 	panicIfError(err)
 
 	outputFile.Close()
-
-	if *openFileFlag {
-		browser.OpenFile("prettyplan.html")
-	}
 }
