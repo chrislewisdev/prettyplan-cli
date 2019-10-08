@@ -4,6 +4,12 @@ Generate easily-readable HTML versions of your `terraform plan` output right fro
 
 ![prettyplan report](https://raw.githubusercontent.com/chrislewisdev/prettyplan-cli/master/screenshot.png)
 
+## Terraform Version Compatibility
+
+Prettyplan was written to work on Terraform plans from 0.11 and earlier. In 0.12, the plan output was significantly changed, addressing many of the pain points that Prettyplan addresses; for this reason, there are no current plans to update Prettyplan to work with 0.12. In my case, Prettyplan was made unnecessary by Terraform's improvements.
+
+Contributions are still welcome if anyone would like to upgrade the code to handle plans from 0.12 onwards.
+
 ## Installation
 
 Head on over to the [Releases page](https://github.com/chrislewisdev/prettyplan-cli/releases) and download the latest release executable for your platform. Place the executable somewhere your command line will be able to find it (i.e. your PATH), and you should be good to go!
