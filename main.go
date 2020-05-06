@@ -17,6 +17,7 @@ import (
 
 func main() {
 	openFileFlag := flag.Bool("open", false, "To open the HTML report once generated")
+	fileNameFlag := flag.String("filename", "prettyplan-output.html", "Specify a filename other than prettyplan-output.html")
 	flag.Parse()
 
 	assets := getAssets()
@@ -28,10 +29,10 @@ func main() {
 		return
 	}
 
-	writeReport("prettyplan.html", assets, plan)
+	writeReport(*fileNameFlag, assets, plan)
 
 	if *openFileFlag {
-		browser.OpenFile("prettyplan.html")
+		browser.OpenFile(*fileNameFlag)
 	}
 }
 
