@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"time"
@@ -18,13 +19,14 @@ import (
 func main() {
 	openFileFlag := flag.Bool("open", false, "To open the HTML report once generated")
 	fileNameFlag := flag.String("filename", "prettyplan-output.html", "Specify a filename other than prettyplan-output.html")
+	stdinFlag := flag.Bool("stdin", false, "Whether to read the plan from stdin instead of running terraform")
 	flag.Parse()
 
 	assets := getAssets()
 
 	var plan *planInfo
 	var err error
-	if plan, err = getPlan(); err != nil {
+	if plan, err = getPlan(*stdinFlag); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
@@ -90,8 +92,16 @@ func getRawPlan() ([]byte, error) {
 	return rawPlan, nil
 }
 
-func getPlan() (*planInfo, error) {
-	rawPlan, err := getRawPlan()
+func getPlan(stdinFlag bool) (*planInfo, error) {
+	var rawPlan []byte
+	var err error
+	if stdinFlag {
+		fmt.Println("Reading plan from stdin...")
+		rawPlan, err = ioutil.ReadAll(os.Stdin)
+	} else {
+		fmt.Println("Running terraform to get plan...")
+		rawPlan, err = getRawPlan()
+	}
 	if err != nil {
 		return nil, err
 	}
