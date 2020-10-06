@@ -79,7 +79,7 @@ type planInfo struct {
 	Parsed parse.Plan
 }
 
-func getPlan() (*planInfo, error) {
+func getRawPlan() ([]byte, error) {
 	rawPlan, err := exec.Command("terraform", "plan", "-no-color").Output()
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
@@ -87,7 +87,14 @@ func getPlan() (*planInfo, error) {
 		}
 		return nil, fmt.Errorf("terraform plan failed! Output:\n %v", err.Error())
 	}
+	return rawPlan, nil
+}
 
+func getPlan() (*planInfo, error) {
+	rawPlan, err := getRawPlan()
+	if err != nil {
+		return nil, err
+	}
 	plan := parse.Parse(string(rawPlan))
 
 	return &planInfo{Raw: string(rawPlan), Parsed: plan}, nil
